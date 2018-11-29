@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+    <head>
+    <title>Hyperbolic tree</title>
+    <meta charset="UTF-8" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="dcterms.rightsHolder" content="Copyright © 2018 Glatzhofer Michael">
+    
+    <link rel="stylesheet" href="d3-hypertree-light.css" id="ldswitch">        
+
+    <script src="d3-hypertree.js"></script>
+    <style>
+            /*
+            .label-link {
+                stroke: #f00 !important;
+                stroke-width: 0.002px !important;
+                stroke-dasharray: .018, .015 !important;
+            }
+            
+            .node {
+                    fill: #cc2a2a !important;
+            */
+            body {
+                font-size: 1.2em;
+            }
+        </style>
+    </head>
+    <body>
+        
+
+
+        <script>            
+            const ht = new hyt.Hypertree(
+                {
+                    parent: document.body             
+                },
+                {
+                    dataloader: hyt.loaders.fromFile('products.d3.json'),
+                    langInitBFS: (ht, n)=> n.precalc.label = n.data.name,
+
+                    layout:{
+                		rootWedge: {
+                			angle: 6.283184,
+						}
+                    },
+                    
+                    filter: { 
+                        maxlabels: 35
+                    },
+
+                	geometry:{
+                		layerOptions:     {
+			                'stem-arc':{
+			                    invisible:  true,
+			                    hideOnDrag: true,
+			                },
+                            'center-node':{
+                                invisible:  true,
+                                hideOnDrag: true,
+                            },
+                            'labels-force':
+                            {
+                                invisible:  true,
+                                hideOnDrag: true,
+                            },
+                            'labels':
+                            {
+                                invisible:  false,
+                                hideOnDrag: false,
+                            }
+                            
+			            },
+                	},
+					
+					interaction: {
+                        λbounds:     [ .3, .84 ],
+                        onNodeClick: (n, m, l)=> {
+                            ht.api.goto({ re:-n.layout.z.re, im:-n.layout.z.im }, null)
+                                .then(()=> ht.drawDetailFrame())                                
+                        }
+					}
+                }
+            )
+
+            ht.initPromise
+                .then(()=> new Promise((ok, err)=> ht.animateUp(ok, err)))            
+                .then(()=> ht.drawDetailFrame())
+        </script>
+    </body>
+</html>
